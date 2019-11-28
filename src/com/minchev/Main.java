@@ -1,12 +1,15 @@
 package com.minchev;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // write your code here
         BigDecimal amount = new BigDecimal(21.21);
         String str = "RegExr Акт за установяване на административно нарушение (АУАН) [/b]№ 1400000057/22.11.2019г.[b]  was [b]created { 12.12.2020[/b] by gskinner.com, and is proudly hosted by Media Temple.\n" +
@@ -18,13 +21,11 @@ public class Main {
         StringBuilder b = new StringBuilder(str);
         //findBoldText(b);
         findBoldTextWithIndexOf(str);
-        System.out.printf("==============");
+        System.out.printf("===== 2=========");
         findBoldTextWithIndexOf2(str);
+        System.out.printf("=======3=======");
+        temp3(str);
     }
-
-
-
-
 
     public static void findBoldText(StringBuilder template) {
         long start = System.currentTimeMillis();
@@ -43,18 +44,18 @@ public class Main {
             String replaceMatch = matcherGroup.replaceAll(regexBold, replaceBold);
             replaceMatch = replaceMatch.replaceAll(regexBoldEnd, replaceBoldEnd);
 
-            template = template.replace(matcher.start(),  matcher.end(), replaceMatch);
+            template = template.replace(matcher.start(), matcher.end(), replaceMatch);
         }
 
         System.out.println(template);
 
         long stop = System.currentTimeMillis();
         System.out.println("Stop : " + stop);
-        System.out.println("Result : " + (stop-start));
+        System.out.println("Result : " + (stop - start));
     }
 
 
-    public static void findBoldTextWithIndexOf2(String str) {
+   /* public static void findBoldTextWithIndexOf2(String str) {
         long start = System.currentTimeMillis();
         System.out.println("Start : " + start);
 
@@ -99,7 +100,7 @@ public class Main {
         System.out.println("Stop : " + stop);
         System.out.println("Result : " + (stop-start));
     }
-
+*/
 
     public static void findBoldTextWithIndexOf(String str) {
         long start = System.currentTimeMillis();
@@ -144,15 +145,96 @@ public class Main {
                 result.append(str.substring(openIndex, str.length()));
             }
 
-
             if (openIndex == -1 && closeIndex == -1) {
                 flag = true;
                 result.append(str.substring(nextIndex, str.length()));
             }
         }
         System.out.println(result);
-        long stop = System.currentTimeMillis();
-        System.out.println("Stop : " + stop);
-        System.out.println("Result : " + (stop-start));
+
     }
+
+    public static void findBoldTextWithIndexOf2(String str) {
+        StringBuilder result = new StringBuilder();
+        boolean flag = false;
+        int openIndex = 0;
+        String pieceOfString;
+        int closeIndex = 0;
+        String boldStart = "<b>";
+        String boldEnd = "</b>";
+
+        while (flag == false) {
+            openIndex = str.indexOf("[b]");
+            closeIndex = str.indexOf("[/b]");
+            if (openIndex > -1 && closeIndex > -1 && openIndex < closeIndex) {
+                closeIndex += 4;
+
+                if (openIndex > 0) openIndex = 0;
+                pieceOfString = str.substring(openIndex, closeIndex);
+                pieceOfString = pieceOfString.replaceFirst("\\[b\\]", boldStart);
+                pieceOfString = pieceOfString.replaceFirst("\\[/b\\]", boldEnd);
+                str = str.substring(closeIndex);
+                result.append(pieceOfString);
+
+            }
+
+            if (openIndex > -1 && closeIndex > -1 && openIndex > closeIndex) {
+                pieceOfString = str.substring(0, openIndex - 1);
+                result.append(pieceOfString);
+                str = str.substring(openIndex);
+            }
+
+            if (openIndex == -1 && closeIndex == -1) {
+                flag = true;
+                result.append(str);
+            }
+        }
+        System.out.println(result);
+
+    }
+
+    public static void temp3(String template) throws IOException {
+
+
+        BufferedReader reader = new BufferedReader(new StringReader(template));
+        StringBuilder result = new StringBuilder();
+        String line;
+        String s;
+        // convert new lines as paragraphs
+        while ((line = reader.readLine()) != null) {
+            if (line.length()>0) {
+                s = searchingWorkString(line);
+                result.append(s + "\n");
+            }
+            // result.append(line+"\n");
+        }
+        System.out.println(result);
+    }
+
+    public static String  searchingWorkString(String str) {
+        int openIndex = 0;
+        String pieceOfString;
+        int closeIndex = 0;
+        String s = "";
+        openIndex = str.indexOf("[b]");
+        closeIndex = str.lastIndexOf("[/b]");
+        if (openIndex > -1 && closeIndex > -1 && openIndex < closeIndex) {
+            closeIndex+=4;
+            pieceOfString = str.substring(openIndex, closeIndex);
+            s = "";
+            if (openIndex>0) {
+                s += str.substring(0,openIndex);
+                s+= "<b>";
+                s+=pieceOfString.substring(3, pieceOfString.length()-4);
+                s+="</b>";
+                openIndex = 0;
+            }
+            pieceOfString   =s;
+            str =  str.replace( str.substring(openIndex, closeIndex), pieceOfString);
+            return searchingWorkString(str);
+        }
+        return str;
+
+    }
+
 }
