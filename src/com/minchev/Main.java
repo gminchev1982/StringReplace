@@ -190,6 +190,7 @@ public class Main {
        if (openIndex > -1 && closeIndex > -1 && openIndex < closeIndex) {
            closeIndex+=4;
            pieceOfString = str.substring(openIndex, closeIndex);
+
            s = "";
            if (openIndex>0) {
                s += str.substring(0,openIndex);
