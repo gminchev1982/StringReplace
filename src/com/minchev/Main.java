@@ -55,53 +55,6 @@ public class Main {
     }
 
 
-   /* public static void findBoldTextWithIndexOf2(String str) {
-        long start = System.currentTimeMillis();
-        System.out.println("Start : " + start);
-
-        StringBuilder result = new StringBuilder();
-        boolean flag = false;
-        int openIndex = 0;
-        String pieceOfString;
-        String pieceOfReplace;
-        int closeIndex = 0;
-        int nextIndex = 0;
-        while (flag == false) {
-            openIndex = str.indexOf("[b]");
-            closeIndex = str.indexOf("[/b]");
-            if (openIndex > -1 && closeIndex > -1 && openIndex<closeIndex) {
-                closeIndex += 4;
-                if (openIndex>0) openIndex = 0;
-                pieceOfReplace = str.substring(openIndex, closeIndex);
-                pieceOfReplace = pieceOfReplace.replaceFirst("\\[b\\]", "<b>");
-                pieceOfReplace = pieceOfReplace.replaceFirst("\\[/b\\]", "</b>");
-                str = str.substring(closeIndex, str.length());
-                result.append(pieceOfReplace);
-                nextIndex= closeIndex;
-            }
-
-            if (openIndex > -1 && closeIndex > -1 && openIndex>closeIndex) {
-                pieceOfString = str.substring(0, openIndex-1);
-                str = str.substring(openIndex, str.length());
-                result.append(pieceOfString);
-                nextIndex= openIndex-1;
-            }
-
-
-            if (openIndex == -1 && closeIndex == -1) {
-                flag = true;
-                //pieceOfString = str;
-                result.append(str);
-                //result.append(str);
-            }
-        }
-        System.out.println(result);
-        long stop = System.currentTimeMillis();
-        System.out.println("Stop : " + stop);
-        System.out.println("Result : " + (stop-start));
-    }
-*/
-
     public static void findBoldTextWithIndexOf(String str) {
         long start = System.currentTimeMillis();
         System.out.println("Start  1: " + start);
@@ -177,7 +130,6 @@ public class Main {
                 result.append(pieceOfString);
 
             }
-
             if (openIndex > -1 && closeIndex > -1 && openIndex > closeIndex) {
                 pieceOfString = str.substring(0, openIndex - 1);
                 result.append(pieceOfString);
